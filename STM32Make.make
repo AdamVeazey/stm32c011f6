@@ -66,6 +66,7 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 
 
 CPP_SOURCES = \
+Core/Src/Application.cpp \
 build/main.cpp
 
 
@@ -139,7 +140,8 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Device/ST/STM32C0xx/Include \
 -IDrivers/CMSIS/Include \
 -IDrivers/STM32C0xx_HAL_Driver/Inc \
--IDrivers/STM32C0xx_HAL_Driver/Inc/Legacy
+-IDrivers/STM32C0xx_HAL_Driver/Inc/Legacy \
+-ILibs/src
 
 
 

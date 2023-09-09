@@ -85,6 +85,7 @@ includeDirectories:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
+  - Libs/src
 
 
 # Files that should be included in the compilation.
