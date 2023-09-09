@@ -1,0 +1,36 @@
+{
+    "name": "STM32 Dev Container",
+    "build" : {
+        "dockerfile": "Dockerfile"
+    },
+	// Add the IDs of extensions you want installed when the container is created
+	"workspaceMount": "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind",
+	/* the path of workspace folder to be opened after container is running
+	 */
+	"workspaceFolder": "${localWorkspaceFolder}",
+	"mounts": [
+		"source=extensionCache,target=/root/.vscode-server/extensions,type=volume"
+	],
+    "customizations": {
+		"vscode": {
+			"settings": {
+				"terminal.integrated.defaultProfile.linux": "bash",
+				"terminal.integrated.scrollback": 10000,
+				"cmake.configureOnOpen" : false
+			},
+			"extensions": [
+				"asciidoctor.asciidoctor-vscode",
+				"ms-vscode.cpptools-themes",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"twxs.cmake",
+				"ms-vscode.cmake-tools",
+				"streetsidesoftware.code-spell-checker",
+
+				"bmd.stm32-for-vscode",
+				"zixuanwang.linkerscript",
+				"dan-c-underwood.arm"
+			]
+        }
+    },
+    "runArgs": ["--privileged"]
+}
