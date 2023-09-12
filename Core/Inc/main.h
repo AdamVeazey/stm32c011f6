@@ -57,12 +57,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define CN5_23_Button_Pin GPIO_PIN_2
-#define CN5_23_Button_GPIO_Port GPIOF
-#define CN5_23_OUT_Pin GPIO_PIN_0
-#define CN5_23_OUT_GPIO_Port GPIOA
-#define CN5_21_IN_Pin GPIO_PIN_1
-#define CN5_21_IN_GPIO_Port GPIOA
 #define CN1_2_USART2_TX_Pin GPIO_PIN_2
 #define CN1_2_USART2_TX_GPIO_Port GPIOA
 #define CN5_18_USART2_RX_Pin GPIO_PIN_3
@@ -81,8 +75,6 @@ void Error_Handler(void);
 #define CN5_6_USART1_TX_GPIO_Port GPIOA
 #define CN5_34_USART1_RX_Pin GPIO_PIN_10
 #define CN5_34_USART1_RX_GPIO_Port GPIOA
-#define CN5_33_LED_Pin GPIO_PIN_6
-#define CN5_33_LED_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

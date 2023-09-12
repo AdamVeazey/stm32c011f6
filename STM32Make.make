@@ -67,6 +67,7 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 
 CPP_SOURCES = \
 Core/Src/Application.cpp \
+Libs/src/EDF/MCU/ST/STM32C011F6/src/GPIO.cpp \
 build/main.cpp
 
 

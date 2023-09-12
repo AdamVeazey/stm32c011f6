@@ -97,6 +97,7 @@ sourceFiles:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
+  - Libs/src/EDF/MCU/ST/STM32C011F6/**
 
 
 # When no makefile is present it will show a warning pop-up.
