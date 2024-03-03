@@ -61,8 +61,6 @@ void Error_Handler(void);
 #define CN1_2_USART2_TX_GPIO_Port GPIOA
 #define CN5_18_USART2_RX_Pin GPIO_PIN_3
 #define CN5_18_USART2_RX_GPIO_Port GPIOA
-#define CN13_SPI1_NSS_Pin GPIO_PIN_4
-#define CN13_SPI1_NSS_GPIO_Port GPIOA
 #define CN5_26_SPI1_SCK_Pin GPIO_PIN_5
 #define CN5_26_SPI1_SCK_GPIO_Port GPIOA
 #define CN5_16_SPI_MISO_Pin GPIO_PIN_6

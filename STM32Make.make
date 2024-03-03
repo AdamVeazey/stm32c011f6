@@ -68,6 +68,7 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 CPP_SOURCES = \
 Core/Src/Application.cpp \
 Libs/src/EDF/MCU/ST/STM32C011F6/src/GPIO.cpp \
+Libs/src/EDF/MCU/ST/STM32C011F6/src/SPIController.cpp \
 build/main.cpp
 
 
@@ -198,7 +199,6 @@ vpath %.cpp $(sort $(dir $(CPP_SOURCES)))
 OBJECTS += $(addprefix $(BUILD_DIR)/,$(notdir $(C_SOURCES:.c=.o)))
 vpath %.c $(sort $(dir $(C_SOURCES)))
 
-# list of ASM program objects
 # list of ASM program objects
 UPPER_CASE_ASM_SOURCES = $(filter %.S,$(ASM_SOURCES))
 LOWER_CASE_ASM_SOURCES = $(filter %.s,$(ASM_SOURCES))

@@ -7,13 +7,18 @@
 
 #include "Application.hpp"
 #include "EDF/MCU/ST/STM32C011F6/GPIO.hpp"
+#include "EDF/MCU/ST/STM32C011F6/SPIController.hpp"
+#include "EDF/Math.hpp"
 
 #include "main.h"
+#include "spi.h"
 
-GPIOFast led( GPIOB, 6 );
-GPIOFast button( GPIOF, 2 );
-GPIOFast in( GPIOA, 1 );
-GPIOFast out( GPIOA, 0 );
+static GPIOFast led( GPIOB, 6 );        // CN5_33
+static GPIOFast button( GPIOF, 2 );     // CN5_23
+static GPIOFast in( GPIOA, 1 );         // CN5_21
+static GPIOFast out( GPIOA, 0 );        // CN5_23
+// static GPIOFast cs( GPIOA, 4 );         // CN5_13
+static SPIControllerFast spi( &hspi1 );
 
 extern "C"
 void application_init() {
@@ -30,10 +35,14 @@ void application_init() {
     button.configureAsInput();
     in.configureAsInput();
     out.configureAsOutput( GPIOFast::Level::HIGH );
+
+    // cs.configureAsOutput( GPIO::Level::HIGH );
 }
 
 extern "C"
 void application_run() {
-    led.toggle();
-    HAL_Delay( 499 );
+    uint8_t data[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    spi.select();
+    spi.transfer( data, EDF::nElements(data) );
+    spi.deselect();
 }
