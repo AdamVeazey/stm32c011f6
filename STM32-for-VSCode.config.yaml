@@ -37,6 +37,7 @@ cFlags:
   - -Wall
   - -fdata-sections
   - -ffunction-sections
+  - -flto
 
 cxxFlags:
   - -Wall
@@ -48,13 +49,14 @@ cxxFlags:
   - -fno-exceptions
   - -fmessage-length=0
   - -std=c++20
+  - -flto
 
 assemblyFlags:
   - -Wall
   - -fdata-sections
   - -ffunction-sections
 
-linkerFlags: []
+linkerFlags: ["-flto"]
 
 # libraries to be included. The -l prefix to the library will be automatically added.
 libraries:
@@ -85,7 +87,7 @@ includeDirectories:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
-  - Libs/src
+  - Libs/include
 
 
 # Files that should be included in the compilation.
@@ -97,7 +99,7 @@ sourceFiles:
   - Src/**
   - Core/Src/**
   - Core/Lib/**
-  - Libs/src/EDF/MCU/ST/STM32C011F6/**
+  - Libs/src/**
 
 
 # When no makefile is present it will show a warning pop-up.

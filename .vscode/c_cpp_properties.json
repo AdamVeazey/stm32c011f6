@@ -8,7 +8,7 @@
         "Drivers/CMSIS/Include",
         "Drivers/STM32C0xx_HAL_Driver/Inc",
         "Drivers/STM32C0xx_HAL_Driver/Inc/Legacy",
-        "Libs/src"
+        "Libs/include"
       ],
       "defines": [
         "STM32C011xx",

@@ -67,8 +67,9 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 
 CPP_SOURCES = \
 Core/Src/Application.cpp \
-Libs/src/EDF/MCU/ST/STM32C011F6/src/GPIO.cpp \
-Libs/src/EDF/MCU/ST/STM32C011F6/src/SPIController.cpp \
+Libs/src/MCU/ST/STM32C011F6/GPIO.cpp \
+Libs/src/MCU/ST/STM32C011F6/SPIController.cpp \
+Libs/src/String.cpp \
 build/main.cpp
 
 
@@ -143,7 +144,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -IDrivers/STM32C0xx_HAL_Driver/Inc \
 -IDrivers/STM32C0xx_HAL_Driver/Inc/Legacy \
--ILibs/src
+-ILibs/include
 
 
 
@@ -160,9 +161,9 @@ CXXFLAGS += -g -gdwarf -ggdb
 endif
 
 # Add additional flags
-CFLAGS += -Wall -fdata-sections -ffunction-sections 
+CFLAGS += -Wall -fdata-sections -ffunction-sections -flto 
 ASFLAGS += -Wall -fdata-sections -ffunction-sections 
-CXXFLAGS += -Wall -Wextra -fdata-sections -ffunction-sections -fmessage-length=0 -fno-builtin -fno-exceptions -fno-rtti -std=c++20 
+CXXFLAGS += -Wall -Wextra -fdata-sections -ffunction-sections -flto -fmessage-length=0 -fno-builtin -fno-exceptions -fno-rtti -std=c++20 
 
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
@@ -180,7 +181,7 @@ LIBDIR = \
 
 
 # Additional LD Flags from config file
-ADDITIONALLDFLAGS = -specs=nano.specs 
+ADDITIONALLDFLAGS = -flto -specs=nano.specs 
 
 LDFLAGS = $(MCU) $(ADDITIONALLDFLAGS) -T$(LDSCRIPT) $(LIBDIR) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 

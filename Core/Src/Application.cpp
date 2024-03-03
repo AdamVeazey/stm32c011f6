@@ -9,6 +9,7 @@
 #include "EDF/MCU/ST/STM32C011F6/GPIO.hpp"
 #include "EDF/MCU/ST/STM32C011F6/SPIController.hpp"
 #include "EDF/Math.hpp"
+#include "EDF/String.hpp"
 
 #include "main.h"
 #include "spi.h"
@@ -41,8 +42,8 @@ void application_init() {
 
 extern "C"
 void application_run() {
-    uint8_t data[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    EDF::String<32> test = "Hello, world!";
     spi.select();
-    spi.transfer( data, EDF::nElements(data) );
+    spi.transfer( test.asByteData(), test.length() );
     spi.deselect();
 }
