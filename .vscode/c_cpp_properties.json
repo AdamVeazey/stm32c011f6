@@ -11,6 +11,7 @@
         "Libs/include"
       ],
       "defines": [
+        "NDEBUG",
         "STM32C011xx",
         "USE_HAL_DRIVER"
       ],

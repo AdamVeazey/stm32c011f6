@@ -21,7 +21,7 @@ ldscript: STM32C011F6Ux_FLASH.ld # linker script
 
 # Compiler definitions. The -D prefix for the compiler will be automatically added.
 cDefinitions: []
-cxxDefinitions: []
+cxxDefinitions: ["NDEBUG"]
 asDefinitions: []
 
 # Compiler definition files. you can add a single files or an array of files for different definitions.

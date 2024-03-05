@@ -130,6 +130,7 @@ C_DEFS =  \
 
 # CXX defines
 CXX_DEFS =  \
+-DNDEBUG \
 -DSTM32C011xx \
 -DUSE_HAL_DRIVER
 
