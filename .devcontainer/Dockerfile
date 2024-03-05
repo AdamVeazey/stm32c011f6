@@ -2,7 +2,7 @@ FROM ubuntu:22.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TOOLS_PATH=/opt/gcc-arm-none-eabi
-ARG ARM_VERSION=12.2.rel1
+ARG ARM_VERSION=13.2.rel1
 ARG ARM_HOST_ARCH=x86_64
 ARG CONTAINER_USER=stm
 ARG USER_UID=1000
@@ -43,6 +43,6 @@ ENV USER=${CONTAINER_USER}
 WORKDIR /home/${CONTAINER_USER}
 
 RUN sed -i 's/@\\h//g' ~/.bashrc
-RUN sed -i 's/\\w\\/\\W\\/g' ~/.bashrc
+# RUN sed -i 's/\\w\\/\\W\\/g' ~/.bashrc
 
 CMD ["/bin/bash", "-c"]
