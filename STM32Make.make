@@ -38,6 +38,7 @@ BUILD_DIR = build
 C_SOURCES =  \
 Core/Src/adc.c \
 Core/Src/gpio.c \
+Core/Src/i2c.c \
 Core/Src/spi.c \
 Core/Src/stm32c0xx_hal_msp.c \
 Core/Src/stm32c0xx_it.c \
@@ -55,6 +56,8 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_exti.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_flash.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_flash_ex.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_gpio.c \
+Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_i2c.c \
+Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_i2c_ex.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_pwr.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_pwr_ex.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_rcc.c \
@@ -68,6 +71,7 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 CPP_SOURCES = \
 Core/Src/Application.cpp \
 Libs/src/MCU/ST/STM32C011F6/GPIO.cpp \
+Libs/src/MCU/ST/STM32C011F6/I2CController.cpp \
 Libs/src/MCU/ST/STM32C011F6/SPIController.cpp \
 Libs/src/String.cpp \
 build/main.cpp
@@ -164,7 +168,7 @@ endif
 # Add additional flags
 CFLAGS += -Wall -fdata-sections -ffunction-sections -flto 
 ASFLAGS += -Wall -fdata-sections -ffunction-sections 
-CXXFLAGS += -Wall -Wextra -fdata-sections -ffunction-sections -flto -fmessage-length=0 -fno-builtin -fno-exceptions -fno-rtti -std=c++20 
+CXXFLAGS += -Wall -Wextra -Wno-missing-field-initializers -Wno-register -fdata-sections -ffunction-sections -flto -fmessage-length=0 -fno-builtin -fno-exceptions -fno-rtti -std=c++20 
 
 # Generate dependency information
 CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"

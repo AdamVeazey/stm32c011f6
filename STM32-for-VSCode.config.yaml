@@ -41,6 +41,8 @@ cFlags:
 
 cxxFlags:
   - -Wall
+  - -Wno-register
+  - -Wno-missing-field-initializers
   - -fdata-sections
   - -ffunction-sections
   - -fno-builtin

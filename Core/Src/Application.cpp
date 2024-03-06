@@ -8,11 +8,13 @@
 #include "Application.hpp"
 #include "EDF/MCU/ST/STM32C011F6/GPIO.hpp"
 #include "EDF/MCU/ST/STM32C011F6/SPIController.hpp"
+#include "EDF/MCU/ST/STM32C011F6/I2CController.hpp"
 #include "EDF/Math.hpp"
 #include "EDF/String.hpp"
 
 #include "main.h"
 #include "spi.h"
+#include "i2c.h"
 
 static GPIOFast led( GPIOB, 6 );        // CN5_33
 static GPIOFast button( GPIOF, 2 );     // CN5_23
@@ -20,6 +22,7 @@ static GPIOFast in( GPIOA, 1 );         // CN5_21
 static GPIOFast out( GPIOA, 0 );        // CN5_23
 // static GPIOFast cs( GPIOA, 4 );         // CN5_13
 static SPIControllerFast spi( &hspi1 );
+static I2CControllerFast i2c( &hi2c1, 0x36 );   // CN5_4, CN5_33
 
 extern "C"
 void application_init() {
@@ -38,6 +41,7 @@ void application_init() {
     out.configureAsOutput( GPIOFast::Level::HIGH );
 
     // cs.configureAsOutput( GPIO::Level::HIGH );
+    i2c.setTimeout( 5'000'000 );
 }
 
 extern "C"
