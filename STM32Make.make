@@ -45,6 +45,7 @@ Core/Src/stm32c0xx_it.c \
 Core/Src/syscalls.c \
 Core/Src/sysmem.c \
 Core/Src/system_stm32c0xx.c \
+Core/Src/tim.c \
 Core/Src/usart.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_adc.c \
@@ -64,6 +65,8 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_rcc.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_rcc_ex.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_spi.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_spi_ex.c \
+Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_tim.c \
+Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_tim_ex.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart.c \
 Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 
@@ -72,6 +75,7 @@ CPP_SOURCES = \
 Core/Src/Application.cpp \
 Libs/src/MCU/ST/STM32C011F6/GPIO.cpp \
 Libs/src/MCU/ST/STM32C011F6/I2CController.cpp \
+Libs/src/MCU/ST/STM32C011F6/PWM.cpp \
 Libs/src/MCU/ST/STM32C011F6/SPIController.cpp \
 Libs/src/String.cpp \
 build/main.cpp

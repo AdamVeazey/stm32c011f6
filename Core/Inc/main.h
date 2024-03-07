@@ -73,6 +73,12 @@ void Error_Handler(void);
 #define CN5_6_USART1_TX_GPIO_Port GPIOA
 #define CN5_34_USART1_RX_Pin GPIO_PIN_10
 #define CN5_34_USART1_RX_GPIO_Port GPIOA
+#define CN5_33_LED_Pin GPIO_PIN_6
+#define CN5_33_LED_GPIO_Port GPIOB
+#define CN5_4_I2C_SCL_Pin GPIO_PIN_7
+#define CN5_4_I2C_SCL_GPIO_Port GPIOB
+#define CN5_14_I2C_SDA_Pin GPIO_PIN_14
+#define CN5_14_I2C_SDA_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 
