@@ -23,7 +23,7 @@ static GPIOFast in( GPIOA, 1 );         // CN5_21
 static GPIOFast out( GPIOA, 0 );        // CN5_23
 static GPIOFast cs( GPIOA, 4 );         // CN5_13
 static SPIControllerFast spi( &hspi1, &cs ); // CN5_11, CN5_16, CN5_26, (CN5_13)
-static I2CControllerFast i2c( &hi2c1, 0x36 );   // CN5_14, CN5_4
+static I2CControllerFast i2c( &hi2c1 );   // CN5_14, CN5_4
 static PWMFast led( &htim1, PWM::Channel::CH_2 );  // CN5_33
 
 extern "C"
