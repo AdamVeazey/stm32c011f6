@@ -36,7 +36,11 @@ ENV PATH="$PATH:${TOOLS_PATH}/bin"
 RUN groupadd --gid $USER_GID $CONTAINER_USER \
     && adduser --uid $USER_UID --gid $USER_GID --disabled-password --gecos "" ${CONTAINER_USER} \
     && usermod -a -G plugdev $CONTAINER_USER \
-    && usermod -a -G dialout $CONTAINER_USER
+    && usermod -a -G dialout $CONTAINER_USER \
+    && groupadd --gid 986 uucp-custom \
+    && usermod -a -G uucp-custom $CONTAINER_USER
+
+# group 986 is the GID of 'uucp' on my host machine.
 
 USER ${CONTAINER_USER}
 ENV USER=${CONTAINER_USER}
