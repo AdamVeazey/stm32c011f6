@@ -73,6 +73,8 @@ Drivers/STM32C0xx_HAL_Driver/Src/stm32c0xx_hal_uart_ex.c
 
 CPP_SOURCES = \
 Core/Src/Application.cpp \
+Libs/src/Drivers/LED_RGB.cpp \
+Libs/src/MCU/ST/STM32C011F6/ADC.cpp \
 Libs/src/MCU/ST/STM32C011F6/GPIO.cpp \
 Libs/src/MCU/ST/STM32C011F6/I2CController.cpp \
 Libs/src/MCU/ST/STM32C011F6/PWM.cpp \
