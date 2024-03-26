@@ -19,6 +19,7 @@
 #include "spi.h"
 #include "i2c.h"
 #include "tim.h"
+#include "usart.h"
 
 static GPIOFast button( GPIOF, 2 );     // CN5_23
 static GPIOFast in( GPIOA, 1 );         // CN5_21
@@ -39,6 +40,16 @@ static ADCScanGroup scanGroup( adc, {
 //     ADC::Channel::IN2,
 // });
 
+template<std::size_t N>
+void print( const EDF::String<N>& str ) {
+    HAL_UART_Transmit( &huart1, str.asByteData(), str.length(), HAL_MAX_DELAY );
+}
+
+template<std::size_t N>
+void print( const char (&s)[N] ) {
+    HAL_UART_Transmit( &huart1, (const uint8_t*)s, N - 1, HAL_MAX_DELAY );
+}
+
 extern "C"
 void application_init() {
     // __HAL_RCC_GPIOA_CLK_ENABLE();
@@ -58,41 +69,66 @@ void application_init() {
     led.setPeriod_ticks( adc.getMaxValue() );
 
     adc.calibrate();
+    adc.setTimeout( 5000 );
 }
 
-void showADCErrorWithLED( ADC::Response r ) {
-    switch( r ) {
-    case ADC::Response::Error:          led.setDutyCyclePercent( 20 );  break;
-    case ADC::Response::ErrorBusy:      led.setDutyCyclePercent( 40 );  break;
-    case ADC::Response::ErrorOverrun:   led.setDutyCyclePercent( 60 );  break;
-    case ADC::Response::ErrorTimeout:   led.setDutyCyclePercent( 80 );  break;
-    default:                            led.setDutyCyclePercent( 100 ); break;
-    }
+extern "C" {
+int _write(int file, char *ptr, int len) {
+    (void)file;
+    HAL_UART_Transmit( &huart1, (const uint8_t*)ptr, len, HAL_MAX_DELAY );
+    return len;
+}
+}
+
+void app_update_adc_values() {
+    scanGroup.start( [](const ADCScanGroup::ResponseData& values) {
+        switch( values ) {
+        case ADC::Response::Ok:             print( "response: Ok           ");    break;
+        case ADC::Response::ErrorBusy:      print( "response: ErrorBusy    ");    break;
+        case ADC::Response::ErrorOverrun:   print( "response: ErrorOverrun ");    break;
+        case ADC::Response::Error:          print( "response: Error        ");    break;
+        case ADC::Response::ErrorTimeout:   print( "response: ErrorTimeout ");    break;
+        }
+        for( std::size_t k = 0; k < values.length(); ++k ) {
+            print( "Value[" + EDF::String<32>((uint32_t)k) + "]: " +
+                    EDF::String<32>(adc.to_mV(values.data()[k])) + " "
+            );
+        }
+        print( "\r\n" );
+    });
 }
 
 extern "C"
 void application_run() {
-    EDF::String<32> test = "Hello, world!";
-    spi.select();
-    spi.transfer( test.asByteData(), test.length() );
-    spi.deselect();
+    // EDF::String<32> test = "Hello, world!";
+    // spi.select();
+    // spi.transfer( test.asByteData(), test.length() );
+    // spi.deselect();
 
-    auto value = joystick.getSingleConversion();
-    if( value == ADC::Response::Ok ){
-        // uint32_t percent_x100 = (value.data() * 1000) / adc.getMaxValue();
-        led.setDutyCycleTicks( value.data() );
-    }
-    else {
-        showADCErrorWithLED( value );
-    }
-
-    auto r = scanGroup.getSamples();
-    if( r == ADC::Response::Ok ) {
-        for( const auto& value : r ) {
-            ADC::to_mV( value );
-        }
-    }
-    else {
-        showADCErrorWithLED( r );
-    }
+    // auto value = joystick.getSingleConversion();
+    // if( value == ADC::Response::Ok ){
+    //     // uint32_t percent_x100 = (value.data() * 1000) / adc.getMaxValue();
+    //     led.setDutyCycleTicks( value.data() );
+    //     print( "joystick: " + EDF::String<32>(value.data()) + "\r\n" );
+    // }
+    app_update_adc_values();
+    adc.handleIRQs();
 }
+
+extern "C"{
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+    adc.ConvCpltCallback( hadc );
+}
+
+void HAL_ADC_ConvHalfCpltCallback(ADC_HandleTypeDef *hadc) {
+    adc.ConvHalfCpltCallback( hadc );
+}
+
+void HAL_ADC_LevelOutOfWindowCallback(ADC_HandleTypeDef *hadc) {
+    adc.LevelOutOfWindowCallback( hadc );
+}
+
+void HAL_ADC_ErrorCallback(ADC_HandleTypeDef *hadc) {
+    adc.ErrorCallback( hadc );
+}
+} /* extern "C" */
