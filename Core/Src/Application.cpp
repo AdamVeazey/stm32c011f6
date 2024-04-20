@@ -13,6 +13,7 @@
 #include "EDF/MCU/ST/STM32C011F6/PWM.hpp"
 #include "EDF/Math.hpp"
 #include "EDF/String.hpp"
+#include "EDF/Drivers/RTC/DS3231.hpp"
 
 #include "main.h"
 #include "adc.h"
@@ -26,7 +27,7 @@ static GPIOFast in( GPIOA, 1 );         // CN5_21
 static GPIOFast out( GPIOA, 0 );        // CN5_23
 static GPIOFast cs( GPIOA, 4 );         // CN5_13
 static SPIControllerFast spi( &hspi1, &cs ); // CN5_11, CN5_16, CN5_26, (CN5_13)
-static I2CControllerFast i2c( &hi2c1 );   // CN5_19, CN5_4
+static I2CController i2c( &hi2c1 );     // CN5_19, CN5_4
 static PWMFast led( &htim1, PWM::Channel::CH_2 );  // CN5_33
 static ADC adc( &hadc1 );
 static ADCChannel joystick( adc, ADC::Pin{ GPIOA, 8 } ); // CN5_15_Joystick
@@ -35,6 +36,7 @@ static ADCScanGroup scanGroup( adc, {
     ADC::Pin{ GPIOA, 8 },
     ADC::Pin{ GPIOA, 0 }
 });
+static EDF::DS3231 rtc( i2c );
 // static ADCScanGroup scanGroup( adc, {
 //     ADC::Channel::IN0,
 //     ADC::Channel::IN2,
@@ -66,6 +68,7 @@ void application_init() {
     led.setPeriod_Hz( 2 );
     led.setDutyCyclePercent( 50 ); // blink LED
 
+    rtc.init();
     // led.setPeriod_ticks( adc.getMaxValue() );
 
     // adc.calibrate();
@@ -86,55 +89,37 @@ void app_update_adc_values() {
     if( readSingle ) {
         joystick.start([](const ADCChannel::ResponseData& value ) {
             switch( value ) {
-            case ADC::Response::Ok:             print("Ok           "); break;
             case ADC::Response::ErrorBusy:      print("ErrorBusy    "); break;
             case ADC::Response::ErrorOverrun:   print("ErrorOverrun "); break;
             case ADC::Response::Error:          print("Error        "); break;
             case ADC::Response::ErrorTimeout:   print("ErrorTimeout "); break;
             case ADC::Response::ErrorInternal:  print("ErrorInternal"); break;
             case ADC::Response::ErrorDMA:       print("ErrorDMA     "); break;
-            }
-            if( value == ADC::Response::Ok ) {
+            case ADC::Response::Ok:
                 readSingle = !readSingle;
                 print(EDF::String<32>("Value: ")
                     .append(value.data())
-                    .append(" readSingle: ")
-                    .append((uint8_t)readSingle)
                     .append("\r\n")
                 );
-            }
-            else {
-                print("\r\n");
+                break;
             }
         });
     }
     else {
-        auto r = scanGroup.start( [](const ADCScanGroup::ResponseData& values) {
+        scanGroup.start( [](const ADCScanGroup::ResponseData& values) {
             if( values == ADC::Response::Ok ) {
                 for( std::size_t k = 0; k < values.length(); ++k ) {
                     print(EDF::String<32>("Value[")
                         .append((uint32_t)k)
                         .append("]: ")
                         .append(adc.to_mV(values.data()[k]))
-                        .append(' ')
+                        .append(" mV ")
                     );
                 }
+                print("\r\n");
                 readSingle = !readSingle;
-                print( "readSingle: " + EDF::String<32>((uint8_t)readSingle) + "\r\n" );
-            }
-            else {
-                print( "Could not read value! response: " + EDF::String<64>(static_cast<uint8_t>(values.response())) + "\r\n" );
             }
         });
-        switch( r ) {
-        case ADC::Response::Ok:             print("scanGroup.start() Ok           \r\n");   break;
-        case ADC::Response::ErrorBusy:      print("scanGroup.start() ErrorBusy    \r\n");   break;
-        case ADC::Response::ErrorOverrun:   print("scanGroup.start() ErrorOverrun \r\n");   break;
-        case ADC::Response::Error:          print("scanGroup.start() Error        \r\n");   break;
-        case ADC::Response::ErrorTimeout:   print("scanGroup.start() ErrorTimeout \r\n");   break;
-        case ADC::Response::ErrorInternal:  print("scanGroup.start() ErrorInternal\r\n");   break;
-        case ADC::Response::ErrorDMA:       print("scanGroup.start() ErrorDMA     \r\n");   break;
-        }
     }
 }
 
@@ -161,24 +146,26 @@ static void i2c_probe() {
     }
 }
 
+void test_ds3231() {
+    char s[100];
+    auto time = rtc.getCurrentTime();
+    if( std::strftime( s, EDF::nElements(s), "%a %b %d %T %Y", &time ) ) {
+        print( EDF::String<100>(s) + ' ' );
+    }
+
+    auto temp = rtc.getTemperature_C_x100();
+    print( "Temp: " + EDF::String<32>(temp / 100) + '.' + EDF::String<32>(temp % 100) + "\r\n" );
+}
+
 extern "C"
 void application_run() {
-    // EDF::String<32> test = "Hello, world!";
-    // spi.select();
-    // spi.transfer( test.asByteData(), test.length() );
-    // spi.deselect();
-
-    // auto value = joystick.getSingleConversion();
-    // if( value == ADC::Response::Ok ){
-    //     // uint32_t percent_x100 = (value.data() * 1000) / adc.getMaxValue();
-    //     led.setDutyCycleTicks( value.data() );
-    //     print( "joystick: " + EDF::String<32>(value.data()) + "\r\n" );
-    // }
+    print("\r\n");
     app_update_adc_values();
+    i2c_probe();
+    test_ds3231();
+
     adc.handleIRQs();
-    // i2c_probe();
-    // print("\r\n");
-    HAL_Delay( 5000 );
+    HAL_Delay( 3000 );
 }
 
 extern "C"{
